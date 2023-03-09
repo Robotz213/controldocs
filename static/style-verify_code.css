@@ -1,0 +1,22 @@
+.form-group {
+    margin-bottom: 20px;
+  }
+  
+  label {
+    font-weight: bold;
+  }
+  
+  .btn {
+    padding: 10px 20px;
+    font-size: 18px;
+    font-weight: bold;
+    background-color: #007bff;
+    border: none;
+    color: #fff;
+  }
+  
+  .btn:hover {
+    background-color: #0062cc;
+    color: #fff;
+  }
+  
