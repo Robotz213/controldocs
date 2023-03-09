@@ -164,7 +164,9 @@ def dashboard():
         return redirect('/login')
     return render_template('dashboard.html')
 
-
+@app.route('/central-de-avisos')
+def central_de_avisos():
+    return "Central de avisos"
 
 @app.route('/central-de-documentos')
 def central_de_documentos():
