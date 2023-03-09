@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 from flask import Flask, render_template, redirect, url_for, request, session, flash
 from flask_mail import Mail, Message
 from hashlib import sha256
@@ -8,7 +8,8 @@ from flask_mail import Mail, Message
 import random
 import string
 from werkzeug.security import generate_password_hash
-import time
+
+
 
 app = Flask(__name__)
 app.secret_key = 'sua_chave_secreta'
@@ -30,10 +31,11 @@ app.config['MAIL_PASSWORD'] = 'sua_senha'
 
 mail = Mail(app)
 
+app.permanent_session_lifetime = timedelta(seconds=60)
+
 @app.route('/')
 def home():
     return redirect(url_for('login'))
-
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -53,7 +55,7 @@ def login():
 
             if hashed_password in db_password:
                 session['logged_in'] = True
-                session['email'] = login
+                session['login'] = login
                 session['login_time'] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")  # registra data e hora do login
 
                 # atualiza a coluna login_time na tabela users com a hora de login
@@ -71,8 +73,6 @@ def login():
             return render_template('login.html', error=error)
 
     return render_template('login.html')
-
-## SIstem de redefinição de senha
 
 @app.route('/forgot-password', methods=['GET', 'POST'])
 def forgot_password():
@@ -103,7 +103,6 @@ def forgot_password():
 
     return render_template('forgot_password.html')
 
-
 @app.route('/verify_code', methods=['GET', 'POST'])
 def verify_code():
     if 'reset_code' not in session:
@@ -119,7 +118,6 @@ def verify_code():
             return render_template('verify_code.html', error=error)
 
     return render_template('verify_code.html')
-
 
 @app.route('/redefinir-senha', methods=['GET', 'POST'])
 def redefinir_senha():
@@ -154,38 +152,55 @@ def redefinir_senha():
 
     return render_template('redefinir_senha.html')
 
+def validar_login():
+    if 'login' not in session:
+        return redirect('/login')
+    else:
+        session.permanent = True
+        return True
 
 @app.route('/dashboard')
 def dashboard():
-    # Verifica se o usuário está logado
-    if 'logged_in' in session:
-        # Obtém o timestamp da última atividade
-        last_activity = session.get('last_activity', time.time())
+    if not validar_login():
+        return redirect('/login')
 
-        # Verifica se a última atividade foi há mais de 60 segundos
-        if time.time() - last_activity > 60:
-            # Remove a sessão e redireciona para a página de login
-            session.clear()
-            flash('Sessão expirada por inatividade')
-            return redirect(url_for('login'))
+    cursor = mysql.connection.cursor()
+    cursor.execute("SELECT tipo_de_arquivo, data_de_inclusao, link_para_download FROM files WHERE usuario = %s", (session['login'],))
+    resultados = cursor.fetchall()
 
-        # Atualiza o timestamp da última atividade
-        session['last_activity'] = time.time()
+    return render_template('dashboard.html', resultados=resultados)
 
-        # Obtém os arquivos do banco de dados
-        cur = mysql.connection.cursor()
-        cur.execute("SELECT tipo_de_arquivo, data_de_inclusao, link_para_download FROM files")
-        result = cur.fetchall()
+# @app.route('/dashboard')
+# def dashboard():
+#     # Verifica se o usuário está logado
+#     if 'logged_in' in session:
+#         # Obtém o timestamp da última atividade
+#         last_activity = session.get('last_activity', time.time())
 
-        if len(result) == 0:
-            msg = 'Nenhum arquivo encontrado'
-            return render_template('dashboard.html', msg=msg)
-        else:
-            data = cur.fetchall()
-            cur.close()
-            return render_template('dashboard.html', dados=data)
-    else:
-        return redirect(url_for('login'))
+#         # Verifica se a última atividade foi há mais de 60 segundos
+#         if time.time() - last_activity > 60:
+#             # Remove a sessão e redireciona para a página de login
+#             session.clear()
+#             flash('Sessão expirada por inatividade')
+#             return redirect(url_for('login'))
+
+#         # Atualiza o timestamp da última atividade
+#         session['last_activity'] = time.time()
+
+#         # Obtém os arquivos do banco de dados
+#         cur = mysql.connection.cursor()
+#         cur.execute("SELECT tipo_de_arquivo, data_de_inclusao, link_para_download FROM files WHERE usuario = %s", (session['login'],))
+#         result = cur.fetchall()
+
+#         if result == 0:
+#             msg = 'Nenhum arquivo encontrado'
+#             return render_template('dashboard.html', msg=msg)
+#         else:
+#             resultados = cur.fetchall()
+#             cur.close()
+#             return render_template('dashboard.html', resultados=resultados)
+#     else:
+#         return redirect(url_for('login'))
     
 @app.route('/logout')
 def logout():

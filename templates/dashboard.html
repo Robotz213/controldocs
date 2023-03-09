@@ -1,27 +1,49 @@
 <!DOCTYPE html>
 <html>
-  <head>
+<head>
     <title>Dashboard</title>
-  </head>
-  <body>
+    <style>
+        /* Estilo da tabela */
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            max-width: 800px;
+            margin: 0 auto;
+            background: linear-gradient(to bottom, #003366, #001a33);
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            font-family: Arial, sans-serif;
+            color: #fff;
+            border-radius: 10px;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+            border-bottom: 1px solid #000;
+        }
+        th {
+            background-color: #1abc9c;
+        }
+        a {
+            color: #fff;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
     <h1>Dashboard</h1>
-    {% if msg %}
-      <p>{{ msg }}</p>
-    {% else %}
-      <table>
+    <table>
         <tr>
-          <th>Tipo de arquivo</th>
-          <th>Data de inclusão</th>
-          <th>Link para download</th>
+            <th>Tipo de arquivo</th>
+            <th>Data de inclusão</th>
+            <th>Link para download</th>
         </tr>
-        {% for row in dados %}
-          <tr>
-            <td>{{ row[0] }}</td>
-            <td>{{ row[1] }}</td>
-            <td><a href="{{ row[2] }}">Download</a></td>
-          </tr>
+        {% for resultado in resultados %}
+        <tr>
+            <td>{{ resultado[0] }}</td>
+            <td>{{ resultado[1] }}</td>
+            <td><a href="{{ resultado[2] }}">Download</a></td>
+        </tr>
         {% endfor %}
-      </table>
-    {% endif %}
-  </body>
+    </table>
+</body>
 </html>
