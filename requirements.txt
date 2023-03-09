@@ -1,0 +1,6 @@
+mysql-connector-python 
+flask 
+flask-mysqldb 
+passlib 
+flask_mail 
+Werkzeug
