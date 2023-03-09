@@ -1,5 +1,3 @@
-import random
-import string
 from datetime import datetime
 from flask import Flask, render_template, redirect, url_for, request, session, flash
 from flask_mail import Mail, Message
