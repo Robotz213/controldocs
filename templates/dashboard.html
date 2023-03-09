@@ -3,47 +3,30 @@
 <head>
     <title>Dashboard</title>
     <style>
-        /* Estilo da tabela */
-        table {
-            border-collapse: collapse;
-            width: 100%;
-            max-width: 800px;
-            margin: 0 auto;
-            background: linear-gradient(to bottom, #003366, #001a33);
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            font-family: Arial, sans-serif;
-            color: #fff;
+        .tela-grande {
+            width: 500px;
+            height: 300px;
             border-radius: 10px;
+            background-color: lightblue;
+            display: inline-block;
+            margin: 20px;
         }
-        th, td {
-            padding: 10px;
-            text-align: left;
-            border-bottom: 1px solid #000;
-        }
-        th {
-            background-color: #1abc9c;
-        }
-        a {
-            color: #fff;
-            text-decoration: none;
+        .botao {
+            display: inline-block;
+            margin: 20px;
         }
     </style>
 </head>
 <body>
-    <h1>Dashboard</h1>
-    <table>
-        <tr>
-            <th>Tipo de arquivo</th>
-            <th>Data de inclusão</th>
-            <th>Link para download</th>
-        </tr>
-        {% for resultado in resultados %}
-        <tr>
-            <td>{{ resultado[0] }}</td>
-            <td>{{ resultado[1] }}</td>
-            <td><a href="{{ resultado[2] }}">Download</a></td>
-        </tr>
-        {% endfor %}
-    </table>
+    <div class="tela-grande">
+        <h1>Tela 1</h1>
+        <p>Conteúdo da tela 1</p>
+        <a href="{{ url_for('central_de_documentos') }}" class="botao">Central de documentos</a>
+    </div>
+    <div class="tela-grande">
+        <h1>Tela 2</h1>
+        <p>Conteúdo da tela 2</p>
+        <a href="{{ url_for('central_de_avisos') }}" class="botao">Central de avisos</a>
+    </div>
 </body>
 </html>

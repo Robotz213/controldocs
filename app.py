@@ -158,17 +158,24 @@ def validar_login():
     else:
         session.permanent = True
         return True
-
 @app.route('/dashboard')
 def dashboard():
     if not validar_login():
         return redirect('/login')
+    return render_template('dashboard.html')
+
+
+
+@app.route('/central-de-documentos')
+def central_de_documentos():
+    
 
     cursor = mysql.connection.cursor()
     cursor.execute("SELECT tipo_de_arquivo, data_de_inclusao, link_para_download FROM files WHERE usuario = %s", (session['login'],))
     resultados = cursor.fetchall()
 
-    return render_template('dashboard.html', resultados=resultados)
+    return render_template('central-de-documentos.html', resultados=resultados)
+
 
 # @app.route('/dashboard')
 # def dashboard():
