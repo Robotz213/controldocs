@@ -1,81 +1,78 @@
-/* Estilo para o header e nav */
-header {
-  background-color: #333;
-  color: #fff;
-  padding: 10px;
+body {
+  background-image: url('img/pexels-peter-olexa-3875821.jpg');
+  background-repeat: no-repeat;
+  background-size: cover;
 }
 
-nav {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-nav ul {
-  display: flex;
-  list-style: none;
-}
-
-nav ul li a {
-  color: #fff;
-  text-decoration: none;
-  padding: 5px;
-}
-
-/* Estilo para a seção principal */
-main {
-  margin: 20px;
+.container {
+  width: 400px;
+  margin: 100px auto;
+  background-color: #cacaca77;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 20px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.8);
 }
 
 form {
   display: flex;
   flex-direction: column;
-  width: 50%;
-  margin: 0 auto;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
 }
 
 .form-group {
-  margin: auto;
-  width: 50%;
-  text-align: center;
+  margin-bottom: 20px;
 }
 
 label {
   display: block;
   margin-bottom: 5px;
+  font-weight: bold;
 }
 
-input[type="email"],
+input[type="text"],
 input[type="password"] {
-  padding: 5px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
   font-size: 16px;
-  border: none;
-  border-radius: 3px;
-  box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.2);
-  transition: box-shadow 0.3s ease;
-}
-
-input[type="email"]:focus,
-input[type="password"]:focus {
-  box-shadow: 1px 1px 10px rgba(0, 0, 0, 0.4);
 }
 
 button[type="submit"] {
-  background-color: #333;
-  color: #fff;
-  padding: 5px;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 10px;
   border: none;
-  border-radius: 3px;
+  border-radius: 5px;
+  font-size: 16px;
+  background-color: #428bca;
+  color: #fff;
   cursor: pointer;
   transition: background-color 0.3s ease;
 }
 
+
 button[type="submit"]:hover {
-  background-color: #555;
-  transform: scale(1.05);
+  background-color: #3071a9;
 }
 
-button[type="submit"]:active {
-  background-color: #777;
-  transform: scale(0.95);
+.flash-message {
+  margin-bottom: 20px;
+  padding: 10px;
+  border-radius: 5px;
+  font-size: 16px;
+}
+
+.flash-message.success {
+  background-color: #dff0d8;
+  border-color: #d6e9c6;
+  color: #3c763d;
+}
+
+.flash-message.error {
+  background-color: #f2dede;
+  border-color: #ebccd1;
+  color: #a94442;
 }

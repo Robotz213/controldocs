@@ -40,7 +40,7 @@ def home():
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
-        login = request.form['email']
+        login = request.form['login']
         password = request.form['password']
 
         hashed_password = sha256(password.encode()).hexdigest()
