@@ -1,5 +1,5 @@
 from datetime import datetime, timedelta
-from flask import Flask, render_template, redirect, url_for, request, session, flash
+from flask import (Flask, render_template, redirect, url_for, request, session, flash, redirect, session)
 from flask_mail import Mail, Message
 from hashlib import sha256
 import mysql.connector
@@ -74,6 +74,19 @@ def login():
 
     return render_template('login.html')
 
+@app.route('/dashboard')
+def dashboard():
+    if not validar_login():
+        return redirect('/login')
+    return render_template('dashboard.html')
+
+def validar_login():
+    if 'login' not in session:
+        return redirect('/login')
+    else:
+        session.permanent = True
+        return True
+
 @app.route('/forgot-password', methods=['GET', 'POST'])
 def forgot_password():
     if request.method == 'POST':
@@ -136,33 +149,26 @@ def redefinir_senha():
             error = 'A senha deve ter no mínimo 8 caracteres'
             return render_template('redefinir_senha.html', error=error)
 
-        user_id = session['reset_user_id']
-        hashed_password = (password)
-        hashed_password = generate_password_hash(password)
-
         cur = mysql.connection.cursor()
-        cur.execute("UPDATE users SET password = %s, verification_code = NULL WHERE id = %s", [hashed_password, user_id])
-        mysql.connection.commit()
+        result = cur.execute("SELECT * FROM users WHERE verification_code = %s", [session['reset_code']])
 
-        flash('Sua senha foi atualizada com sucesso.', 'success')
-        session.pop('reset_verified', None)
-        session.pop('reset_user_id', None)
-        session.pop('reset_code', None)
-        return redirect(url_for('login'))
+        if result > 0:
+            data = cur.fetchone()
+            user_id = data[0]
+            hashed_password = generate_password_hash(password)
+
+            cur.execute("UPDATE users SET password = %s, verification_code = NULL WHERE id = %s", [hashed_password, user_id])
+            mysql.connection.commit()
+
+            flash('Sua senha foi atualizada com sucesso.', 'success')
+            session.pop('reset_verified', None)
+            session.pop('reset_code', None)
+            return redirect(url_for('login'))
+        else:
+            error = 'Código inválido'
+            return render_template('redefinir_senha.html', error=error)
 
     return render_template('redefinir_senha.html')
-
-def validar_login():
-    if 'login' not in session:
-        return redirect('/login')
-    else:
-        session.permanent = True
-        return True
-@app.route('/dashboard')
-def dashboard():
-    if not validar_login():
-        return redirect('/login')
-    return render_template('dashboard.html')
 
 @app.route('/central-de-avisos')
 def central_de_avisos():
@@ -178,49 +184,11 @@ def central_de_documentos():
 
     return render_template('central-de-documentos.html', resultados=resultados)
 
-
-# @app.route('/dashboard')
-# def dashboard():
-#     # Verifica se o usuário está logado
-#     if 'logged_in' in session:
-#         # Obtém o timestamp da última atividade
-#         last_activity = session.get('last_activity', time.time())
-
-#         # Verifica se a última atividade foi há mais de 60 segundos
-#         if time.time() - last_activity > 60:
-#             # Remove a sessão e redireciona para a página de login
-#             session.clear()
-#             flash('Sessão expirada por inatividade')
-#             return redirect(url_for('login'))
-
-#         # Atualiza o timestamp da última atividade
-#         session['last_activity'] = time.time()
-
-#         # Obtém os arquivos do banco de dados
-#         cur = mysql.connection.cursor()
-#         cur.execute("SELECT tipo_de_arquivo, data_de_inclusao, link_para_download FROM files WHERE usuario = %s", (session['login'],))
-#         result = cur.fetchall()
-
-#         if result == 0:
-#             msg = 'Nenhum arquivo encontrado'
-#             return render_template('dashboard.html', msg=msg)
-#         else:
-#             resultados = cur.fetchall()
-#             cur.close()
-#             return render_template('dashboard.html', resultados=resultados)
-#     else:
-#         return redirect(url_for('login'))
-    
 @app.route('/logout')
 def logout():
-# Remove a sessão do usuário
-    session.clear()
-    flash('Você saiu', 'success')
+    # remove a sessão do usuário
+    session.pop('username', None)
     return redirect(url_for('login'))
-
-
-
-#Execução
 
 app.run(host='0.0.0.0', port='80',debug=True)
 

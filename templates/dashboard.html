@@ -1,84 +1,27 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Dashboard</title>
-    <style>
-        body {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-        }
-        .tela-grande {
-            width: 500px;
-            height: 300px;
-            border-radius: 10px;
-            background-color: lightblue;
-            display: inline-block;
-            margin: 20px;
-            cursor: pointer;
-            transition: transform 0.2s ease-in-out;
-        }
-        .tela-grande:hover {
-            transform: scale(1.05);
-        }
-        .botao {
-            display: inline-block;
-            margin: 20px;
-            text-decoration: none;
-            color: #ffffff;
-            font-weight: bold;
-            padding: 10px 20px;
-            background-color: #0077cc;
-            border-radius: 5px;
-            transition: background-color 0.2s ease-in-out;
-        }
-        .botao:hover {
-            background-color: #005ea6;
-        }
-        .icone {
-            display: block;
-            width: 50px;
-            height: 50px;
-            margin: 20px auto 0;
-            background-image: url('https://image.flaticon.com/icons/png/512/3648/3648794.png');
-            background-size: contain;
-            background-repeat: no-repeat;
-        }
-
-        .titulo {
-            font-size: 28px;
-            font-weight: bold;
-            text-align: center;
-            margin: 20px 0 0;
-            background-color: #0077cc;
-            color: #fff;
-            border-radius: 5px;
-            padding: 10px 20px;
-            transition: background-color 0.2s ease-in-out;
-            cursor: pointer;
-            text-decoration: none;
-        }
-
-        
-        .titulo:hover {
-            background-color: #005ea6;
-        }
-        .subtitulo {
-            font-size: 18px;
-            text-align: center;
-            margin: 10px 0 0;
-        }
-    </style>
+	<title>Dashboard</title>
+	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styledashboard.css') }}">
 </head>
 <body>
-    <a href="{{ url_for('central_de_documentos') }}" class="tela-grande">
-        <div class="icone"></div>
-        <div class="titulo">Seus Documentos</div>
-    </a>
-    <a href="{{ url_for('central_de_avisos') }}" class="tela-grande">
-        <div class="icone"></div>
-        <div class="titulo">Central de Avisos</div>
-    </a>
+	<h1>Dashboard <button class="logout-button"><a href="{{ url_for('logout') }}">Logout</a></button>
+    </h1>
+	<ul>
+		<li>
+			<a href="{{ url_for('central_de_avisos') }}">
+				<div class="container avisos">
+					<span>Avisos</span>
+				</div>
+			</a>
+		</li>
+		<li>
+			<a href="{{ url_for('central_de_documentos') }}">
+				<div class="container documentos">
+					<span>Central de Documentos</span>
+				</div>
+			</a>
+		</li>
+	</ul>
 </body>
 </html>
