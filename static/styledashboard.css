@@ -8,6 +8,13 @@ table {
 	font-family: Arial, sans-serif;
 	color: #fff;
   }
+
+  body {
+	background-image: url('img/pexels-peter-olexa-3875821.jpg');
+	background-repeat: no-repeat;
+	background-size: cover;
+	}
+	
   
   th, td {
 	padding: 10px;
