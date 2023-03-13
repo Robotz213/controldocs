@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Central de Avisos</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='stylecentral-de-avisos.css') }}">
+</head>
+<body>
+    <h1>Central de Avisos</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Data</th>
+                <th>Trabalho?</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for registro in registros %}
+            <tr>
+                <td>{{ registro[0] }}</td>
+                <td>{{ registro[1] }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>

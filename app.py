@@ -172,7 +172,13 @@ def redefinir_senha():
 
 @app.route('/central-de-avisos')
 def central_de_avisos():
-    return "Central de avisos"
+    # Seleciona todos os registros do banco de dados
+    cursor = mysql.connection.cursor()
+    cursor.execute("SELECT * FROM avisos ORDER BY data ASC")
+    registros = cursor.fetchall()
+
+    # Renderiza o template HTML e passa as informações do banco de dados
+    return render_template('central-de-avisos.html', registros=registros)
 
 @app.route('/central-de-documentos')
 def central_de_documentos():
