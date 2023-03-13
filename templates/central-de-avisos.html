@@ -9,15 +9,16 @@
     <table>
         <thead>
             <tr>
+                <th>Aviso</th>
                 <th>Data</th>
-                <th>Trabalho?</th>
+                
             </tr>
         </thead>
         <tbody>
             {% for registro in registros %}
             <tr>
-                <td>{{ registro[0] }}</td>
                 <td>{{ registro[1] }}</td>
+                <td>{{ registro[2] }}</td>
             </tr>
             {% endfor %}
         </tbody>
