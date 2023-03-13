@@ -174,7 +174,7 @@ def redefinir_senha():
 def central_de_avisos():
     # Seleciona todos os registros do banco de dados
     cursor = mysql.connection.cursor()
-    cursor.execute("SELECT * FROM avisos ORDER BY data ASC")
+    cursor.execute("SELECT * FROM avisos ORDER BY data DESC")
     registros = cursor.fetchall()
 
     # Renderiza o template HTML e passa as informações do banco de dados
