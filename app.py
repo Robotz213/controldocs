@@ -49,7 +49,7 @@ def login():
 
         if result > 0:
             data = cur.fetchone()
-            db_password = data[2]
+            db_password = data[4]
 
             if hashed_password in db_password:
                 session['logged_in'] = True
@@ -57,7 +57,7 @@ def login():
                 session['login_time'] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")  # registra data e hora do login
 
                 # atualiza a coluna login_time na tabela users com a hora de login
-                cur.execute("UPDATE users SET login_time = %s WHERE user = %s", [session['login_time'], login])
+                cur.execute("UPDATE users SET login_time = %s WHERE cpf = %s", [session['login_time'], login])
                 mysql.connection.commit()
 
                 flash('Você está logado', 'success')
@@ -183,7 +183,7 @@ def central_de_documentos():
     
 
     cursor = mysql.connection.cursor()
-    cursor.execute("SELECT tipo_de_arquivo, data_de_inclusao, link_para_download FROM files WHERE usuario = %s", (session['login'],))
+    cursor.execute("SELECT tipo_de_arquivo, data_de_inclusao, link_para_download FROM files WHERE usuario = %s ORDER BY data_de_inclusao DESC", (session['login'],))
     resultados = cursor.fetchall()
 
     return render_template('central-de-documentos.html', resultados=resultados)
