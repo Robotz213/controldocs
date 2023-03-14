@@ -1,15 +1,13 @@
 from datetime import datetime, timedelta
 from flask import (Flask, render_template, redirect, url_for, request, session, flash, redirect, session)
 from flask_mail import Mail, Message
-from hashlib import sha256
+from hashlib import sha512
 import mysql.connector
 from flask_mysqldb import MySQL
 from flask_mail import Mail, Message
 import random
 import string
 from werkzeug.security import generate_password_hash
-
-
 
 app = Flask(__name__)
 app.secret_key = 'sua_chave_secreta'
@@ -43,7 +41,7 @@ def login():
         login = request.form['login']
         password = request.form['password']
 
-        hashed_password = sha256(password.encode()).hexdigest()
+        hashed_password = sha512(password.encode()).hexdigest()
         
 
         cur = mysql.connection.cursor()
