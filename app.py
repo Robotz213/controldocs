@@ -45,7 +45,7 @@ def login():
         
 
         cur = mysql.connection.cursor()
-        result = cur.execute("SELECT * FROM users WHERE user = %s", [login])
+        result = cur.execute("SELECT * FROM users WHERE cpf = %s", [login])
 
         if result > 0:
             data = cur.fetchone()
@@ -181,9 +181,18 @@ def central_de_avisos():
 @app.route('/central-de-documentos')
 def central_de_documentos():
     
+    cursor = mysql.connection.cursor()
+    cursor.execute("SELECT user FROM users WHERE cpf = %s", (session['login'],))
+    usuario = cursor.fetchall()
+
+    user = ''
+    for usr in usuario[0]:
+        user = usr
+
 
     cursor = mysql.connection.cursor()
-    cursor.execute("SELECT tipo_de_arquivo, data_de_inclusao, link_para_download FROM files WHERE usuario = %s ORDER BY data_de_inclusao DESC", (session['login'],))
+    comando = f'SELECT tipo_de_arquivo, data_de_inclusao, link_para_download FROM files WHERE usuario = "{user}"'
+    cursor.execute(comando)
     resultados = cursor.fetchall()
 
     return render_template('central-de-documentos.html', resultados=resultados)
